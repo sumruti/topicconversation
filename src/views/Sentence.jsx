@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 // reactstrap components
 import {
   Button,
@@ -53,9 +55,9 @@ class Topic extends React.Component {
                     </Row>
                     <Row>
                       <div className="update pr-2 ml-auto">
-                        <Button className="btn-round" color="danger" type="submit">
+                      <Link to="./view-lessons"><Button className="btn-round" color="danger" type="submit">
                           Cancel
-                        </Button>
+                        </Button></Link>
                       </div>
                       <div className="update pr-2 pull-right">
                         <Button className="btn-round" color="success" type="submit">
