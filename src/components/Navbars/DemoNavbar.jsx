@@ -86,7 +86,21 @@ class Header extends React.Component {
       this.sidebarToggle.current.classList.toggle("toggled");
     }
   }
+
+  logout(){  
+
+     localStorage.clear();
+
+       this.props.history.replace('/auth/login');
+  }
+
+  view_users(){
+
+   this.props.history.replace('/admin/view-users');
+  }
   render() {
+
+  var user_email = localStorage.getItem('e');
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
       <Navbar
@@ -139,12 +153,12 @@ class Header extends React.Component {
               >
                 <DropdownToggle caret nav>
                   <p>
-                    bovp2000@gmail.com
+                    {user_email}
                   </p>
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem tag="a">View Profile</DropdownItem>
-                  <DropdownItem tag="a">Logout</DropdownItem>
+                  <DropdownItem tag="a" onClick={(e)=>this.view_users()}>View Users</DropdownItem>
+                  <DropdownItem tag="a" onClick={(e)=>this.logout()}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </Nav>

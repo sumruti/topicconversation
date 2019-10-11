@@ -11,6 +11,13 @@ import AddTopic from "views/Topic.jsx";
 import AddLesson from "views/Lesson.jsx";
 import ViewLessons from "views/ViewLesson.jsx";
 import AddSentence from"views/Sentence.jsx";
+import viewusers from"views/viewusers.jsx";
+
+
+
+
+
+
 
 var routes = [
   {
@@ -35,7 +42,7 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/view-lessons",
+    path: "/view-Sentence/:lesson_name/:lesson_id",
     name: "View Lessons",
     icon: "fa fa-plus-circle",
     component: ViewLessons,
@@ -49,14 +56,14 @@ var routes = [
     layout: "/admin"
   },
   {
-    path: "/lessons",
+    path: "/lessons/:topic_name/:topic_id",
     name: "Lesson",
     icon: "fa fa-plus-circle",
     component: AddLesson,
     layout: "/admin"
   },
   {
-    path: "/travel",
+    path: "/:topic_name/:topic_id",
     name: "Travel",
     icon: "fa fa-folder",
     component: Dashboard,
@@ -67,6 +74,12 @@ var routes = [
     name: "Society",
     icon: "fa fa-folder",
     component: Dashboard,
+    layout: "/admin"
+  },{
+    path: "/view-users",
+    name: "Society",
+    icon: "fa fa-folder",
+    component: viewusers,
     layout: "/admin"
   },
   {

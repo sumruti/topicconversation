@@ -6,6 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import DemoNavbar from "components/Navbars/DemoNavbar.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import routes from "routes.js";
+import get_topics from "../api/get_topics";
 
 var ps;
 
@@ -48,6 +49,7 @@ class Dashboard extends React.Component {
         <Sidebar
           {...this.props}
           routes={routes}
+          get_topics={get_topics}
           bgColor={this.state.backgroundColor}
           activeColor={this.state.activeColor}
         />

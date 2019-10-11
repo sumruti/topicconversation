@@ -5,12 +5,15 @@ import { Nav } from "reactstrap";
 import PerfectScrollbar from "perfect-scrollbar";
 
 import logo from "logo.svg";
-
+import {get_Topics} from "../../api/api";
 var ps;
 
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
+     this.state = {
+      topics:''
+      };
     this.activeRoute.bind(this);
     this.sidebar = React.createRef();
   }
@@ -25,6 +28,23 @@ class Sidebar extends React.Component {
         suppressScrollY: false
       });
     }
+      get_Topics()
+    
+      .then(
+        (result) => {
+          this.setState({
+            topics: result.data.data,
+          
+          });
+        },
+       
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
   }
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -32,6 +52,14 @@ class Sidebar extends React.Component {
     }
   }
   render() {
+
+  var user_id = localStorage.getItem('i');
+  
+
+    if(!user_id){
+       this.props.history.replace('/auth/login');
+    }
+   const {topics } = this.state;
     return (
       <div
         className="sidebar"
@@ -56,7 +84,21 @@ class Sidebar extends React.Component {
         </div>
         <div className="sidebar-wrapper" ref={this.sidebar}>
           <Nav>
-            {this.props.routes.map((prop, key) => {
+              <li>
+                  <NavLink
+                    to="/admin/topics"
+                    className="nav-link"
+                    activeClassName="active"
+                    style={{marginBottom: '-20px'}} 
+                  >
+                    <label style={{fontSize: '20px'}} ><b>Topics</b>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label className="fa fa-plus-circle" style={{fontSize: '25px'}}></label></label>
+                  </NavLink>
+               
+              </li>
+            {topics !='' &&
+            topics.map((prop, key) => {
               return (
                 <li
                   className={
@@ -65,28 +107,18 @@ class Sidebar extends React.Component {
                   }
                   key={key}
                 >
-                  {prop.path !=="/login" && prop.path !=="/signup" && prop.path !=="/lessons" && prop.path !=="/add-sentence" && prop.path !=="/view-lessons" && prop.path==='/topics' ?
-                  <NavLink
-                    to={prop.layout + prop.path}
-                    className="nav-link"
-                    activeClassName="active"
-                    style={{marginBottom: '-20px'}} 
-                  >
-                    <label style={{fontSize: '20px'}} ><b>{prop.name}</b>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <label className={prop.icon} style={{fontSize: '25px'}}></label></label>
-                  </NavLink>
-                  :''}
-                  {prop.path !=="/login" && prop.path !=="/signup" && prop.path !=="/lessons" && prop.path !=="/add-sentence" && prop.path !=="/view-lessons" && prop.path!=='/topics' ?
-                  <NavLink
-                    to={prop.layout + prop.path}
+                  
+                   <NavLink
+                    to={"/admin/"+prop.name+'/'+prop.id}
                     className="nav-link"
                     activeClassName="active"
                   >
-                    <i className={prop.icon} />
+                    <i className="fa fa-folder" />
                     <p>{prop.name}</p>
                   </NavLink>
-                  :''}
+               
+                
+                  
                 </li>
               );
             })}

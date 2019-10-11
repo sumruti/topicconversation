@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import {login} from "../../api/api";
 
 // reactstrap components
 import {
@@ -14,6 +15,49 @@ import {
 } from "reactstrap";
 
 class Login extends React.Component {
+
+constructor() {
+    super();
+     this.state = {
+       email:'',
+       pass:''
+      
+    };
+
+}
+
+
+login(){
+
+  login(this.state.email,this.state.pass).then(
+        (result) => {
+         console.log(result.data.status)
+
+         if(result.data.status==false){
+
+           alert("Invalid login");
+
+         }else{
+
+            localStorage.setItem('r',result.data.data[0].role);
+            localStorage.setItem('i',result.data.data[0].id);
+            localStorage.setItem('e',result.data.data[0].email);
+
+             this.props.history.replace('/admin/topics');
+         }
+
+        
+        },
+       
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error
+          });
+        }
+      )
+
+}
   render() {
     return (
       <>
@@ -43,7 +87,7 @@ class Login extends React.Component {
                       <Col className="pr-1" md="12">
                         <FormGroup>
                           <label>User email address</label>
-                          <Input placeholder="User Email Address" type="text" />
+                          <Input placeholder="User Email Address" type="text"  onChange={(event) => this.setState({email: event.target.value})} />
                         </FormGroup>
                       </Col>
                       <Col className="pr-1" md="12">
@@ -51,7 +95,7 @@ class Login extends React.Component {
                           <label htmlFor="exampleInputEmail1">
                             Password
                           </label>
-                          <Input placeholder="Enter Password" type="password" />
+                          <Input placeholder="Enter Password" type="password" onChange={(event) => this.setState({pass: event.target.value})}/>
                         </FormGroup>
                       </Col>
                     </Row>  
@@ -62,7 +106,7 @@ class Login extends React.Component {
                     </Row>                  
                     <Row>
                       <div className="update ml-auto mr-auto">
-                        <Button color="dark" type="submit">
+                        <Button color="dark" type="button" onClick={(e)=>this.login(e)}>
                           Log In
                         </Button>
                       </div>

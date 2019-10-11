@@ -1,6 +1,11 @@
 import React from "react";
 
-import { Link } from 'react-router-dom';
+import { Link , Redirect } from 'react-router-dom';
+import swal from 'sweetalert';
+
+
+
+import {Create_Topic} from "../api/api";
 
 // reactstrap components
 import {
@@ -20,10 +25,51 @@ import {
 import 'font-awesome/css/font-awesome.min.css';
 
 class Topic extends React.Component {
+
+ constructor() {
+    super();
+     this.state = {
+      Name:'',
+      ImageLink:'',
+      Group:''
+     
+    };
+
+  }
+
+ save(e){
+   var saved = Create_Topic(this.state.Name,this.state.ImageLink,this.state.Group);
+    saved.then(function(data){
+
+
+
+      if(data.data.status==true){
+        swal({
+          title: "Topic!",
+          text: "Created successfully!",
+          icon: "success",
+          timer: 3000,
+          showCancelButton: false,
+          showConfirmButton: false 
+        });
+        return <Redirect to='/login'  />
+      }
+    })
+
+ }
+
+ 
+
+
   render() {
+      var role = localStorage.getItem('r');
+
     return (
       <>
+
         <div className="content">
+
+     
         <Card className="card-user">
                 <CardHeader>
                   <CardTitle tag="h5">Create Topic</CardTitle>
@@ -34,7 +80,7 @@ class Topic extends React.Component {
                       <Col md="12">
                         <FormGroup>
                           <label>Name</label>
-                          <Input type="text" placeholder="Enter Name"/>
+                          <Input type="text" placeholder="Enter Name"  onChange={(event) => this.setState({Name: event.target.value})}/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -42,18 +88,21 @@ class Topic extends React.Component {
                       <Col md="12">
                         <FormGroup>
                           <label>Image Link</label>
-                          <Input type="text" placeholder="Enter Image Link"/>
+                          <Input type="text" placeholder="Enter Image Link"  onChange={(event) => this.setState({ImageLink: event.target.value})}/>
                         </FormGroup>
                       </Col>
                     </Row>
+
+                    {role != '' &&
                     <Row>
                       <Col md="12">
                         <FormGroup>
                           <label>Group</label>
-                          <Input type="text" placeholder="Enter Group"/>
+                          <Input type="text" placeholder="Enter Group"  onChange={(event) => this.setState({Group: event.target.value})}/>
                         </FormGroup>
                       </Col>
                     </Row>
+                    }
                     <Row>
                       <div className="update pr-2 ml-auto">
                       <Link to="./travel"><Button className="btn-round" color="danger" type="submit">
@@ -61,7 +110,7 @@ class Topic extends React.Component {
                         </Button></Link>
                       </div>
                       <div className="update pr-2 pull-right">
-                        <Button className="btn-round" color="success" type="submit">
+                        <Button className="btn-round" color="success" type="button" disabled={this.state.Group=='' ||  this.state.ImageLink =="" || this.state.Name == ""} onClick={(e)=>this.save(e)}>
                           Submit
                         </Button>
                       </div>
