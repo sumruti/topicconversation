@@ -101,6 +101,7 @@ class Header extends React.Component {
   render() {
 
   var user_email = localStorage.getItem('e');
+  var role = localStorage.getItem('r');
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
       <Navbar
@@ -157,7 +158,11 @@ class Header extends React.Component {
                   </p>
                 </DropdownToggle>
                 <DropdownMenu right>
+                  {role =="admin" ? 
+                   
                   <DropdownItem tag="a" onClick={(e)=>this.view_users()}>View Users</DropdownItem>
+                  :''
+                  }
                   <DropdownItem tag="a" onClick={(e)=>this.logout()}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>

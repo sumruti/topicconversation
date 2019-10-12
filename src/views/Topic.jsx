@@ -38,7 +38,8 @@ class Topic extends React.Component {
   }
 
  save(e){
-   var saved = Create_Topic(this.state.Name,this.state.ImageLink,this.state.Group);
+   var user_id =   localStorage.getItem('i');
+   var saved = Create_Topic(this.state.Name,this.state.ImageLink,this.state.Group,user_id);
     saved.then(function(data){
 
 
@@ -52,7 +53,6 @@ class Topic extends React.Component {
           showCancelButton: false,
           showConfirmButton: false 
         });
-        return <Redirect to='/login'  />
       }
     })
 
@@ -105,12 +105,10 @@ class Topic extends React.Component {
                     }
                     <Row>
                       <div className="update pr-2 ml-auto">
-                      <Link to="./travel"><Button className="btn-round" color="danger" type="submit">
-                          Cancel
-                        </Button></Link>
+                     
                       </div>
                       <div className="update pr-2 pull-right">
-                        <Button className="btn-round" color="success" type="button" disabled={this.state.Group=='' ||  this.state.ImageLink =="" || this.state.Name == ""} onClick={(e)=>this.save(e)}>
+                        <Button className="btn-round" color="success" type="button" disabled={  this.state.ImageLink =="" || this.state.Name == ""} onClick={(e)=>this.save(e)}>
                           Submit
                         </Button>
                       </div>

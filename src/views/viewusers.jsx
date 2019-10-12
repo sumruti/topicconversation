@@ -2,7 +2,9 @@ import React from "react";
 
 import { Link } from 'react-router-dom';
 import swal from 'sweetalert';
-import {users,get_Topics} from "../api/api";
+import {users,get_groups,assign_groups,isadmin} from "../api/api";
+import $ from 'jquery';
+
 
 // reactstrap components
 import {
@@ -21,6 +23,8 @@ constructor() {
      this.state = {
        users:'',
        groups:'',
+       set_groups:'',
+       user_id:''
       
     };
 
@@ -29,7 +33,7 @@ constructor() {
 componentDidMount() {
 
    this.get_users();
-   this.getTopics();
+   this.getgroup();
    
      
   }
@@ -62,9 +66,9 @@ componentDidMount() {
  }
 
 
- getTopics(id){
+ getgroup(id){
 
-     get_Topics()
+     get_groups()
       .then(
         (result) => {
          console.log(result);
@@ -127,13 +131,55 @@ get_name(name,language,sentence,Sentence_id){
 
 }
 
+get_groups(event){
+  this.setState({set_groups: event.target.value})
+}
 
 
+assign_group(){
+  var groups = [];
+   $.each($("input[name='group_name']:checked"), function(){
+          groups.push($(this).val());
+      });
 
+      console.log(groups);
+
+    assign_groups(groups,this.state.user_id);
+   console.log(this.state.set_groups)
+}
+
+user_id(user_id){
+  console.log(user_id);
+   this.setState({user_id: user_id})
+}
+
+get_checked_value(value){
+  console.log(value);
+  for(let i = 0 ; i < value.length; i++){
+     if(value[i].users){
+       var users = value[i].users.split(',');
+        if (users.indexOf(this.state.user_id) > -1) {
+            return true;
+        }else{
+            return false;
+         console.log(value[i].users.split(','));
+        }
+     }
+    
+  }
+}
+
+addisadmin(user_id){
+
+    isadmin(user_id);
+  
+}
 
   render() {
 
+   var user_id =   localStorage.getItem('i');
    const {users,groups} = this.state;
+   console.log(groups);
     return (
       <>
         <div className="content">
@@ -147,22 +193,30 @@ get_name(name,language,sentence,Sentence_id){
                     </button>
                   </div>
                   <div className="modal-body">
-                   <div className="form-group">
-                    <label htmlFor="recipient-name" className="col-form-label">Groups:</label>
+                  
                    
-
-                     <select className="form-control">
+                      <Row>
+                    
                      {groups !='' &&
 
                         groups.map((item, key) => (
-                           <option value="asdsa">{item.group}</option>
+                        
+                            <Col md="3" xs="3">
+                                 <div className="form-group">
+                                      <label htmlFor="recipient-name" className="col-form-label" style={{marginRight: "17px"}}>{item.group}:</label>
+                                      <input type="checkbox" value={item.group} id="group_name" name="group_name"  checked={this.get_checked_value(groups)}/> 
+                                   </div> 
+                            </Col>
+                            
+                       
+                        
                       ))} 
-                     </select>
-                  </div>
+                       </Row>
+                    
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e)=>this.update(e)}>Submit</button>
+                    <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={(e)=>this.assign_group(e)}>Submit</button>
                   </div>
                 </div>
               </div>
@@ -201,8 +255,8 @@ get_name(name,language,sentence,Sentence_id){
                             <td>{key + 1}</td>
                             <td>{item.email}</td>
                             
-                            <td><input type="checkbox" /></td>
-                             <td ><button type="button"   className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Assign Group</button></td>
+                            <td><input type="checkbox" onClick={(e)=>this.addisadmin(item.id)}/></td>
+                             <td ><button type="button"   className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onClick={(e)=>this.user_id(item.id)}>Assign Group</button></td>
                           </tr>
                      ))} 
                     

@@ -28,7 +28,9 @@ class Sidebar extends React.Component {
         suppressScrollY: false
       });
     }
-      get_Topics()
+    var user_id =   localStorage.getItem('i');
+    var user_role =   localStorage.getItem('r');
+      get_Topics(user_id,user_role)
     
       .then(
         (result) => {

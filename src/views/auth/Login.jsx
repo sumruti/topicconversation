@@ -87,7 +87,7 @@ login(){
                       <Col className="pr-1" md="12">
                         <FormGroup>
                           <label>User email address</label>
-                          <Input placeholder="User Email Address" type="text"  onChange={(event) => this.setState({email: event.target.value})} />
+                          <Input placeholder="User Email Address" type="email"  onChange={(event) => this.setState({email: event.target.value})} required/>
                         </FormGroup>
                       </Col>
                       <Col className="pr-1" md="12">
@@ -95,7 +95,7 @@ login(){
                           <label htmlFor="exampleInputEmail1">
                             Password
                           </label>
-                          <Input placeholder="Enter Password" type="password" onChange={(event) => this.setState({pass: event.target.value})}/>
+                          <Input placeholder="Enter Password" type="password" onChange={(event) => this.setState({pass: event.target.value})} />
                         </FormGroup>
                       </Col>
                     </Row>  
@@ -106,7 +106,7 @@ login(){
                     </Row>                  
                     <Row>
                       <div className="update ml-auto mr-auto">
-                        <Button color="dark" type="button" onClick={(e)=>this.login(e)}>
+                        <Button color="dark" type="button" onClick={(e)=>this.login(e)} disabled={this.state.email == '' ||  this.state.pass==''}>
                           Log In
                         </Button>
                       </div>

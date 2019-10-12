@@ -4,12 +4,13 @@ import config from "../config.json";
 
 
 
-export function Create_Topic(Name,ImageLink,Group) {
+export function Create_Topic(Name,ImageLink,Group,user_id) {
 	console.log(config.ApiUrl);
 	  return axios.post(config.ApiUrl+'create_topic',{
 	  		Name:Name,
 		  	ImageLink:ImageLink,
-		  	Group:Group
+		  	Group:Group,
+		  	user_id:user_id,
 		  
 	  });
 };
@@ -20,10 +21,6 @@ export function register(email,pass) {
 	  return axios.post(config.ApiUrl+'register',{email:email,pass:pass});
 };
 
-export function get_groups() {
-	
-	  return axios.post(config.ApiUrl+'get_groups');
-};
 
 
 export function users() {
@@ -35,9 +32,9 @@ export function login(email,pass) {
 	  return axios.post(config.ApiUrl+'login',{email:email,pass:pass});
 };
 
-export function get_Topics() {
+export function get_Topics(user_id,user_role) {
 	console.log(config.ApiUrl);
-	  return axios.post(config.ApiUrl+'get_topics');
+	  return axios.post(config.ApiUrl+'get_topics',{user_id:user_id,user_role:user_role});
 };
 
 export function lession(Lesson,topic_id) {
@@ -74,5 +71,19 @@ export function delete_Sentence(Sentence_id) {
 export function update_Sentence(Sentence_id,name,sentence,language,lesson_id) {
 	
 	  return axios.post(config.ApiUrl+'update_Sentence',{Sentence_id:Sentence_id,name:name,sentence:sentence,language:language,lesson_id:lesson_id});
+};
+
+export function get_groups() {
+	
+	  return axios.post(config.ApiUrl+'get_groups');
+};
+
+export function assign_groups(group,user_id) {
+	
+	  return axios.post(config.ApiUrl+'assign_groups',{group:group,user_id:user_id});
+};
+export function isadmin(user_id) {
+	
+	  return axios.post(config.ApiUrl+'isadmin',{user_id:user_id});
 };
 

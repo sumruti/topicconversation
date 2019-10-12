@@ -26,9 +26,23 @@ constructor() {
 }
 
 save(){
-   register(this.state.email,this.state.pass)
+   register(this.state.email,this.state.pass).then(
+        (result) => {
 
-   alert('Sign up successfully,Please login.');
+           if(result.data.status==false){
+               alert(result.data.message);
+           }else{
+             localStorage.setItem('r','');
+             localStorage.setItem('i',result.data.id);
+             localStorage.setItem('e',this.state.email);
+
+             this.props.history.replace('/admin/topics');
+           }
+
+        })
+
+
+ 
 
 }
 
@@ -78,7 +92,7 @@ save(){
                     </Row>
                     <Row>
                       <div className="update ml-auto mr-auto">
-                        <Button color="dark" type="button" onClick={(e)=>this.save(e)}>
+                        <Button color="dark" type="button" onClick={(e)=>this.save(e)} disabled={this.state.email == '' ||  this.state.pass==''}>
                           Sign Up
                         </Button>
                       </div>
