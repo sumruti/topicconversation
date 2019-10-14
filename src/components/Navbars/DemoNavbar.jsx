@@ -158,7 +158,7 @@ class Header extends React.Component {
                   </p>
                 </DropdownToggle>
                 <DropdownMenu right>
-                  {role =="admin" ? 
+                  {role =="admin" || role =="superadmin"  ? 
                    
                   <DropdownItem tag="a" onClick={(e)=>this.view_users()}>View Users</DropdownItem>
                   :''
