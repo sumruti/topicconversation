@@ -31,8 +31,8 @@ constructor() {
 }
 
 componentDidMount() {
-
-   this.get_users();
+   var user_id =   localStorage.getItem('i');
+   this.get_users(user_id);
    this.getgroup();
    
      
@@ -144,8 +144,25 @@ assign_group(){
 
       console.log(groups);
 
-    assign_groups(groups,this.state.user_id);
-   console.log(this.state.set_groups)
+  var saved =  assign_groups(groups,this.state.user_id);
+     saved.then(function(data){
+
+
+
+      if(data.data.status==true){
+         swal({
+            title: "Success!",
+            text: "Group assign successfully!",
+            icon: "success",
+            timer: 3000,
+            showCancelButton: false,
+            showConfirmButton: false 
+          });
+
+       
+        
+      }
+    })
 }
 
 user_id(user_id){
@@ -154,24 +171,53 @@ user_id(user_id){
 }
 
 get_checked_value(value){
-  console.log(value);
-  for(let i = 0 ; i < value.length; i++){
-     if(value[i].users){
-       var users = value[i].users.split(',');
-        if (users.indexOf(this.state.user_id) > -1) {
+  if(value){
+    var users  = value.split(',');
+     if (users.indexOf(this.state.user_id) > -1) {
             return true;
         }else{
             return false;
-         console.log(value[i].users.split(','));
         }
-     }
-    
   }
+  
 }
 
-addisadmin(user_id){
+addisadmin(e,user_id,email){
+  
+   var saved =  isadmin(e.target.checked,user_id,email);
 
-    isadmin(user_id);
+      saved.then(function(data){
+
+
+
+      if(data.data.status==true){
+       if(data.data.value== false){
+         swal({
+            title: "Success!",
+            text: "User role changed to normal user successfully!",
+            icon: "success",
+            timer: 3000,
+            showCancelButton: false,
+            showConfirmButton: false 
+          });
+
+       }else{
+           swal({
+            title: "Success!",
+            text: "User role changed to admin successfully!",
+            icon: "success",
+            timer: 3000,
+            showCancelButton: false,
+            showConfirmButton: false 
+          });
+       }
+        
+      }
+    })
+  
+}
+
+handleCheckBoxClick(){
   
 }
 
@@ -204,7 +250,7 @@ addisadmin(user_id){
                             <Col md="3" xs="3">
                                  <div className="form-group">
                                       <label htmlFor="recipient-name" className="col-form-label" style={{marginRight: "17px"}}>{item.group}:</label>
-                                      <input type="checkbox" value={item.group} id="group_name" name="group_name"  checked={this.get_checked_value(groups)}/> 
+                                      <input type="checkbox"  id="group_name" name="group_name" value={item.group} checked={this.get_checked_value(item.users)} onChange={(e) => {this.handleCheckBoxClick(2, e.target.checked)}}/> 
                                    </div> 
                             </Col>
                             
@@ -253,9 +299,9 @@ addisadmin(user_id){
                         users.map((item, key) => (
                           <tr>
                             <td>{key + 1}</td>
-                            <td>{item.email}</td>
+                            <td>{item.email} </td>
                             
-                            <td><input type="checkbox" onClick={(e)=>this.addisadmin(item.id)}/></td>
+                            <td><input type="checkbox" onClick={(e)=>this.addisadmin(e,item.id,item.email)} ref="check_me" defaultChecked={item.role == "admin"}/></td>
                              <td ><button type="button"   className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onClick={(e)=>this.user_id(item.id)}>Assign Group</button></td>
                           </tr>
                      ))} 

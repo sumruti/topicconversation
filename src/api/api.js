@@ -23,9 +23,9 @@ export function register(email,pass) {
 
 
 
-export function users() {
+export function users(id) {
 	
-	  return axios.post(config.ApiUrl+'get_users');
+	  return axios.post(config.ApiUrl+'get_users',{user_id:id});
 };
 export function login(email,pass) {
 	
@@ -82,8 +82,8 @@ export function assign_groups(group,user_id) {
 	
 	  return axios.post(config.ApiUrl+'assign_groups',{group:group,user_id:user_id});
 };
-export function isadmin(user_id) {
+export function isadmin(value,user_id,email) {
 	
-	  return axios.post(config.ApiUrl+'isadmin',{user_id:user_id});
+	  return axios.post(config.ApiUrl+'isadmin',{value:value,user_id:user_id,email:email});
 };
 

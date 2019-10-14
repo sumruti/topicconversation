@@ -31,9 +31,16 @@ class Dashboard extends React.Component {
     };
 
 }
-componentDidMount() {
+componentDidUpdate() {
 
-   this.get_lessions(this.props.match.params.topic_id);
+    var new_value = localStorage.getItem('new');
+    var old_value = localStorage.getItem('new');
+
+    //if(new_value == old_value){
+      this.get_lessions(this.props.match.params.topic_id);
+    //}
+
+   
    
      
   }

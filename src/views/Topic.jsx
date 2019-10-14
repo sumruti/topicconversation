@@ -93,7 +93,7 @@ class Topic extends React.Component {
                       </Col>
                     </Row>
 
-                    {role != '' &&
+                   {role =="admin" || role =="superadmin"  && 
                     <Row>
                       <Col md="12">
                         <FormGroup>
