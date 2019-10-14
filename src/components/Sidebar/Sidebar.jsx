@@ -5,14 +5,15 @@ import { Nav } from "reactstrap";
 import PerfectScrollbar from "perfect-scrollbar";
 
 import logo from "logo.svg";
-import {get_Topics} from "../../api/api";
+import {get_Topics , get_lession} from "../../api/api";
 var ps;
 
 class Sidebar extends React.Component {
   constructor(props) {
     super(props);
      this.state = {
-      topics:''
+      topics:'',
+      active:'',
       };
     this.activeRoute.bind(this);
     this.sidebar = React.createRef();
@@ -58,15 +59,49 @@ class Sidebar extends React.Component {
       ps.destroy();
     }
   }
+
+  side_bar(group){
+    this.setState({active:'active'})
+    localStorage.setItem('g',group);
+     var get_item = localStorage.getItem('g');
+     console.log(this.props.location.pathname.split("/")[3]);
+     this.get_lessions(this.props.location.pathname.split("/")[3]);
+      localStorage.setItem('old',localStorage.getItem('new'));
+      localStorage.setItem('new',this.props.location.pathname.split("/")[3]);
+  }
+
+  get_lessions(id){
+
+     get_lession(id)
+      
+        .then(
+          (result) => {
+           console.log(result);
+            this.setState({
+              lesson: result.data.data,
+            
+            });
+          },
+         
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        )
+
+  }
   render() {
 
   var user_id = localStorage.getItem('i');
+  var get_item = localStorage.getItem('g');
   
 
     if(!user_id){
        this.props.history.replace('/auth/login');
     }
-   const {topics } = this.state;
+   const { topics } = this.state;
     return (
       <div
         className="sidebar"
@@ -108,12 +143,9 @@ class Sidebar extends React.Component {
             topics.map((prop, key) => {
               return (
                 <li
-                  className={
-                    this.activeRoute(prop.name) == prop.name ? "active" :''
-                    )
-                  }
-                  key={key}
-                >
+                  className={get_item == prop.name ? 'active' : ''}
+                    key={key}
+                onClick={(e)=>this.side_bar(prop.name)}>
                   
                    <NavLink
                     to={"/admin/"+prop.name+'/'+prop.id}
